@@ -26,6 +26,7 @@ class BigReal{
         void removeSuffixZeros();
         void removePrefixZeros();
         void suffixZeros(BigDecimalInt & first, BigDecimalInt & second);
+        void prefixZeros(BigDecimalInt & first, BigDecimalInt & second);
         BigReal addition(BigReal anotherNumber);
         BigReal subtraction(BigReal anotherReal);
         BigReal decideOperation(BigReal anotherDec);
@@ -85,19 +86,18 @@ void BigReal::sperateIntAndFloat(string num){
 
 // removes any unnecessary zeros at the beginning of the number  ex. 01 -> 1 
 void BigReal::removePrefixZeros(){
-    string f = intPart.getNumber(); 
-    for (int i = 0; i < f.size()-1; i++){
-        cout << f[i] << endl;
-        if (f[i] == '0'){
-            
-            f.erase(i, 1);
+    char newSign = (intPart.sign() == 1)? '+' : '-';
+    string newIntPart =  intPart.getNumber(); 
+    for (int i = 0; i < newIntPart.size(); i++){
+        if (newIntPart[i] == '0'){
+            newIntPart.erase(i, 1);
             i--;
         }
         else{
             break;
         }
     }
-    intPart.setNumber(f);
+    intPart.setNumber(newSign + newIntPart);
 }
 
 // removes any unnecessary zeros at the end of the float part  ex. 1.10 -> 1.1
@@ -173,19 +173,25 @@ BigReal BigReal::addition(BigReal anotherReal){
 }
 
 BigReal BigReal::subtraction(BigReal anotherReal){
+
+    
     BigDecimalInt subOfFloat, subOfInt;
 
     BigReal big , small;
     big = (this->isAbsBiggerThan(anotherReal))? *this : anotherReal;
     small = (this->isAbsBiggerThan(anotherReal))? anotherReal : *this;
+    cout << "Big " << big.getNumber() << " small " << small.getNumber() << endl;
 
     char sign = big.sign();
+
+    suffixZeros(big.floatPart, small.floatPart);
 
     big.intPart = (BigDecimalInt)big.intPart.getNumber();
     small.intPart = (BigDecimalInt)small.intPart.getNumber();
 
     if (big.floatPart < small.floatPart)
     {
+        
         big.floatPart.setNumber("1" + big.floatPart.getNumber());
         big.intPart = (BigDecimalInt)big.intPart.getNumber() - (BigDecimalInt)"1";
     }
@@ -212,7 +218,6 @@ bool BigReal::operator >(BigReal anotherReal){
     {
         return true;
     }
-    // (sign() == '-' && anotherReal.sign() == '+')
     else
     {
         return false;
@@ -229,7 +234,12 @@ bool BigReal:: operator==(BigReal anotherReal){
 
 // compares between the absolute values of this number and another real number
 bool BigReal::isAbsBiggerThan(BigReal anotherReal){
- return (intPart.getNumber() + floatPart.getNumber()) > (anotherReal.intPart.getNumber() + anotherReal.floatPart.getNumber());
+    prefixZeros(intPart, anotherReal.intPart);
+    bool result = (intPart.getNumber() + floatPart.getNumber()) > (anotherReal.intPart.getNumber() + anotherReal.floatPart.getNumber());
+    removePrefixZeros();
+    anotherReal.removePrefixZeros();
+    removeSuffixZeros();
+    return result;
 }
 
 // adds zeros at the end of the float part to help with calculations
@@ -247,12 +257,32 @@ void BigReal::suffixZeros(BigDecimalInt & first, BigDecimalInt & second){
         first = tempfirst;
     }
 }
+
+
+// adds zeros at the beginning of the number
+void BigReal::prefixZeros(BigDecimalInt & first, BigDecimalInt & second){
+    
+     if (first.size() > second.size()){
+        int difference = first.size() - second.size();
+        string prefix (difference, '0');
+        string tempSecond = prefix + second.getNumber();
+        second = tempSecond;
+    }else {
+        int difference = second.size() - first.size();
+        string prefix (difference, '0');
+        string tempfirst = prefix + first.getNumber();
+        first = tempfirst;
+    }
+}
+
 int main(){
-    BigReal x("-+123");
-    cout << x.getNumber();
-    BigReal y("7.5");
+    BigReal y("-13.1");
+    BigReal x("0007.5432");
 
-
-
-
+    cout << x.getNumber() << endl;
+    BigReal z = x + y;
+    cout << z.getNumber() << endl;
+    BigReal u = x;
+    cout << "U: " << u.getNumber() << endl;
+    cout << endl << x.getNumber() << endl;
 }
