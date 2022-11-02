@@ -99,10 +99,12 @@ void BigReal::initalizeReal(string num){
 void BigReal::removePrefixZeros(BigDecimalInt& num){
     char newSign = getBigDecimalSign(realNumber);
     string newNum =  num.getNumber(); 
+    // cout << "newNum " << newNum << " decimal " << decimalPoint << endl;
     for (int i = 0; i < newNum.size() - decimalPoint-1; i++){ 
-        if (newNum[i] == '0' ){
+        if (newNum[i] == '0' && newNum.size() >1){
             newNum.erase(i, 1);
             i--;
+            // cout << " test " << newNum << endl;
         }
         else{
             break;
@@ -197,6 +199,7 @@ BigReal BigReal::sum(BigReal anotherReal){
     resultStr.insert(resultStr.size() - resultDecimalPoint, ".");
 
     result.setNumber(resultSign + resultStr);
+    // cout << "test " <<endl;
     return result;
 }
 string BigReal::fillZerosToDecimalPoint(string str, int decimalPoint){
