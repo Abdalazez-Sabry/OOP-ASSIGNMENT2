@@ -25,26 +25,29 @@ class BigReal{
         BigDecimalInt realNumber;
         int decimalPoint;
         void initalizeReal(string num);
+        char getBigDecimalSign(BigDecimalInt b);
         void removeSuffixZeros(BigDecimalInt& num);
         void removePrefixZeros(BigDecimalInt& num);
-        void suffixZeros(BigDecimalInt & first, BigDecimalInt & second);
-        void prefixZeros(BigDecimalInt & first, BigDecimalInt & second);
-        BigReal calculation(BigReal anotherNumber);
-        bool isAbsBiggerThan(BigReal anotherReal);
+        void removeSignIfZero();
+        void addSuffixZeros(BigReal & first, BigReal & second);
+        string fillZerosToDecimalPoint(string str, int decimalPoint);
         
-    
     public:
         BigReal(){}
         BigReal(BigDecimalInt num);
         BigReal(string num);
         BigReal(int num);
         BigReal(double num);
+
         string getNumber();
+        void setNumber(BigDecimalInt newNum);
+        void setNumber(int newNum);
+        void setNumber(double newNum);
         void setNumber(string newNum);
         int size();
         char sign();
     
-    
+        BigReal sum(BigReal anotherNumber);
         BigReal operator+(const BigReal anotherReal);
         BigReal operator-(const BigReal anotherReal);
         bool operator >(BigReal anotherReal);
@@ -53,7 +56,8 @@ class BigReal{
 };
 
 BigReal::BigReal(BigDecimalInt num){
-    initalizeReal(num.getNumber());
+    char sign = getBigDecimalSign(num);
+    initalizeReal(sign + num.getNumber());
 }
 
 BigReal::BigReal(string num){
@@ -67,27 +71,33 @@ BigReal::BigReal(double num){
 }
 
 void BigReal::initalizeReal(string num){
-    decimalPoint =num.size()- num.find(".");
+    int dotPos = num.find(".");
+    decimalPoint = num.size() - dotPos - 1; 
 
-    
-    if (num.find(".") == -1)
-    {
+    if (stod(num) == 0){
+        realNumber = BigDecimalInt("0");
+        decimalPoint = 0;
+    }
+    else if (dotPos == -1){
+        
         realNumber = num;
         decimalPoint = 0;
-        
+    }else if(decimalPoint == 0){
+        num.erase(dotPos, 1);
+        realNumber = num;
     }else{
-        decimalPoint =num.size()- num.find(".") -1; 
-        num.erase(num.find("."),1);
+        num.erase(dotPos, 1);
         realNumber = num;
         removeSuffixZeros(realNumber);
     }
     removePrefixZeros(realNumber);
-    // if (realNumber.getNumber ="")
+
+    removeSignIfZero();
 }
 
 // removes any unnecessary zeros at the beginning of the number  ex. 01 -> 1 
 void BigReal::removePrefixZeros(BigDecimalInt& num){
-    char newSign = (num.sign() == 1)? '+' : '-';
+    char newSign = getBigDecimalSign(realNumber);
     string newNum =  num.getNumber(); 
     for (int i = 0; i < newNum.size() - decimalPoint-1; i++){ 
         if (newNum[i] == '0' ){
@@ -100,180 +110,123 @@ void BigReal::removePrefixZeros(BigDecimalInt& num){
     }
     num = (newSign + newNum);
 }
-
 // removes any unnecessary zeros at the end of the float part  ex. 1.10 -> 1.1
 void BigReal::removeSuffixZeros(BigDecimalInt& num){
-    // cout << " suffix " << num.getNumber() << " decipoint " << decimalPoint << endl;
-    char newSign = (num.sign() == 1)? '+' : '-';
+    char newSign = getBigDecimalSign(realNumber);
     string newNum = num.getNumber(); 
     int newDecimal = decimalPoint;
-    for (int i = newNum.size() - 1; i > decimalPoint; i --){ 
+    for (int i = newNum.size() - 1; i >= newDecimal; i --){ 
         if (newNum[i] == '0'){
             newNum.erase(i, 1);
             newDecimal--;
+            if (newDecimal == 0){
+                break;
+            }
         }
         else{
             break;
         }
     }
-    // change this plese
-    if (newNum == ""){
-        newNum = "0";
-    }
     decimalPoint = newDecimal;
-    num = (newSign + newNum);
+    num.setNumber(newSign + newNum);
     
+}
+void BigReal::removeSignIfZero(){
+    if (realNumber.getNumber() == "0"){
+        realNumber.setNumber("0");
+    }
 }
 
 int BigReal::size(){
-    int floatSize = (floatPart.getNumber() != "0")? floatPart.size() : 0;
-    return intPart.size() + floatSize;
+    return realNumber.size();
 }
-
 char BigReal::sign(){
-    return (realNumber.sign() == 1)? '+' : '-';
-
+    return getBigDecimalSign(realNumber);
+}
+char BigReal::getBigDecimalSign(BigDecimalInt b){
+    return (b.sign() == 1)? '+' : '-';
 }
 
 string BigReal::getNumber(){
     string number = realNumber.getNumber();
-    string minus = (sign() == '-')? "-" : "";
-
-    if (decimalPoint != 0 && decimalPoint !=-1)
-    {
+    string putMinusIfNegative = (sign() == '-')? "-" : "";
+    if (decimalPoint != 0){
         number.insert(number.size() - decimalPoint, ".");
     }
-    return minus + number;
+    return putMinusIfNegative + number;
+}
+void BigReal::setNumber(BigDecimalInt newNum){
+    char sign = getBigDecimalSign(newNum);
+    initalizeReal(sign + newNum.getNumber());
+}
+void BigReal::setNumber(int newNum){
+    initalizeReal(to_string(newNum));
+}
+void BigReal::setNumber(double newNum){
+    initalizeReal(to_string(newNum));
 }
 void BigReal::setNumber(string newNum){
     initalizeReal(newNum);
 }
 
 BigReal BigReal::operator+(BigReal anotherReal){
-
-    return calculation(anotherReal);
+    return sum(anotherReal);
 }
 
 BigReal BigReal:: operator-(BigReal anotherReal){
-    char sign = (anotherReal.sign() == '+')? '-' : '+';
+    // change anotherReal sign then send it to sum
+    char sign = getBigDecimalSign(realNumber);
     string resultStr = anotherReal.realNumber.getNumber();
     resultStr.insert(resultStr.size() - anotherReal.decimalPoint, ".");
     anotherReal.setNumber(sign + resultStr);
-    return calculation(anotherReal);
+
+    return sum(anotherReal);
 }
 
 
-BigReal BigReal::calculation(BigReal anotherReal){
-    BigDecimalInt realNumberCopy = realNumber;
-    suffixZeros(realNumberCopy, anotherReal.realNumber);
-    cout << realNumberCopy << " another real: " << anotherReal.realNumber << endl;
+BigReal BigReal::sum(BigReal anotherReal){
+    BigReal thisCopy (*this), result;
+    addSuffixZeros(thisCopy, anotherReal);
 
-    BigReal result;
-    BigDecimalInt resultDecimal = realNumberCopy + anotherReal.realNumber;
-    char resultSign = (resultDecimal.sign() == 1)? '+' : '-';
-    int resultDecimalPoint = (decimalPoint > anotherReal.decimalPoint)? decimalPoint : anotherReal.decimalPoint;
+    BigDecimalInt resultDecimal = thisCopy.realNumber + anotherReal.realNumber;
+    char resultSign = getBigDecimalSign(resultDecimal);
+    int resultDecimalPoint = (thisCopy.decimalPoint > anotherReal.decimalPoint)? thisCopy.decimalPoint : anotherReal.decimalPoint;
+
     string resultStr = resultDecimal.getNumber();
+    resultStr = fillZerosToDecimalPoint(resultStr, resultDecimalPoint);
     resultStr.insert(resultStr.size() - resultDecimalPoint, ".");
+
     result.setNumber(resultSign + resultStr);
     return result;
 }
+string BigReal::fillZerosToDecimalPoint(string str, int decimalPoint){
+    while (decimalPoint > str.size() - 1){
+        str.insert(0, "0");
+    }
 
-
-
-bool BigReal::operator >(BigReal anotherReal){
-    // suffixZeros(floatPart, anotherReal.floatPart);
-    // if (sign() == '+' && anotherReal.sign() == '+')
-    // {
-    //     return this->isAbsBiggerThan(anotherReal);
-    // }
-    // else if (sign() == '-' && anotherReal.sign() == '-')
-    // {
-    //     return !this->isAbsBiggerThan(anotherReal);
-    // }else if (sign() == '+' && anotherReal.sign() == '-')
-    // {
-    //     return true;
-    // }
-    // else
-    // {
-    //     return false;
-    // }
-    suffixZeros(realNumber, anotherReal.realNumber);
-    bool result = realNumber> anotherReal.realNumber;
-    removeSuffixZeros(realNumber);
-    removeSuffixZeros(anotherReal.realNumber);
-    return result;
-}
-bool BigReal::operator <(BigReal anotherReal){
-    suffixZeros(realNumber, anotherReal.realNumber);
-    bool result = realNumber< anotherReal.realNumber;
-    removeSuffixZeros(realNumber);
-    removeSuffixZeros(anotherReal.realNumber);
-    return result;
+    return str;
 }
 
+bool BigReal::operator>(BigReal anotherReal){
+    BigReal thisCopy (*this);
+    addSuffixZeros(thisCopy, anotherReal);
+    return thisCopy.realNumber > anotherReal.realNumber;
+}
+bool BigReal::operator<(BigReal anotherReal){
+    BigReal thisCopy (*this);
+    addSuffixZeros(thisCopy, anotherReal);
+    return thisCopy.realNumber < anotherReal.realNumber;
+}
 bool BigReal:: operator==(BigReal anotherReal){
     return (!(*this > anotherReal) && !(anotherReal > *this));
 }
 
-
-// compares between the absolute values of this number and another real number
-bool BigReal::isAbsBiggerThan(BigReal anotherReal){
-    prefixZeros(intPart, anotherReal.intPart);
-    bool result = (intPart.getNumber() + floatPart.getNumber()) > (anotherReal.intPart.getNumber() + anotherReal.floatPart.getNumber());
-    // removePrefixZeros();
-    // anotherReal.removePrefixZeros();
-    // removeSuffixZeros();
-    return result;
-}
-
 // adds zeros at the end of the float part to help with calculations
-void BigReal::suffixZeros(BigDecimalInt & first, BigDecimalInt & second){
-    char firstSign = (first.sign() == 1)? '+' : '-';
-    char secondSign = (second.sign() == 1)? '+' : '-';
-     if (first.size() > second.size()){
-        int difference = first.size() - second.size();
-        string suffix (difference, '0');
-        string tempSecond = secondSign + second.getNumber() + suffix;
-        second = tempSecond;
-    }else {
-        int difference = second.size() - first.size();
-        string suffix (difference, '0');
-        string tempfirst = firstSign + first.getNumber() + suffix;
-        first = tempfirst;
-    }
-}
+void BigReal::addSuffixZeros(BigReal & first, BigReal & second){
+    BigReal& big = (first.decimalPoint > second.decimalPoint)? first : second;
+    BigReal& small = (first.decimalPoint > second.decimalPoint)? second : first;
 
-
-// adds zeros at the beginning of the number
-void BigReal::prefixZeros(BigDecimalInt & first, BigDecimalInt & second){
-    
-     if (first.size() > second.size()){
-        int difference = first.size() - second.size();
-        string prefix (difference, '0');
-        string tempSecond = prefix + second.getNumber();
-        second = tempSecond;
-    }else {
-        int difference = second.size() - first.size();
-        string prefix (difference, '0');
-        string tempfirst = prefix + first.getNumber();
-        first = tempfirst;
-    }
-}
-
-int main(){
-    BigReal x("-0750.000");
-    BigReal y("-500.5");
-    BigReal z ("500.5");
-    BigReal t("500.6");
-    BigReal n("0");
-
-    cout << x.getNumber() << y.getNumber() << endl;
-    cout << (x>y) << " second " << (y<z) << " third "<< (z>t) << " fourth " << (n>x) << " fifth " << (n > z) << endl;
-    cout << x.getNumber() << y.getNumber() << endl;
-
-    // cout << y.getNumber() << " second " << x.getNumber() << endl;
-    
-    // cout << x.getNumber() << endl;
-    // z = x - y;
-    // cout << z.getNumber() << endl << " y: " << x.getNumber();
+    int difference = big.decimalPoint - small.decimalPoint;
+    string suffix(difference, '0');
+    small.realNumber = small.sign() + small.realNumber.getNumber() + suffix;
 }
