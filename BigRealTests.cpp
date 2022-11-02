@@ -102,7 +102,28 @@ int main(){
     test3();
     test4();
 
+    BigReal x("-0750.000");
+    BigReal y("-500.5");
+    BigReal z ("500.5");
+    BigReal t("-500.5");
+    BigReal n("0");
+    // cout << n.getNumber() << endl;
+    // cout << (t+n).getNumber() << endl;
 
-    
+    // cout << x.getNumber() << y.getNumber() << endl;
+    // cout << (x>y) << " second " << (y<z) << " third "<< (z>t) << " fourth " << (n>x) << " fifth " << (n > z) << endl;
+    // cout << x.getNumber() << y.getNumber() << endl;
+    // cout << x.getNumber() << y.getNumber() << endl;
+    // cout << (x>y) << " second " << (y<z) << " third "<< (z>t) << " fourth " << (n>x) << " fifth " << (n > z) << endl;
+    // cout << x.getNumber() << y.getNumber() << endl;
+
+    // cout << y.getNumber() << " second " << x.getNumber() << endl;
+
+    // cout << x.getNumber() << endl;
+    // z = x - y;
+    // cout << z.getNumber() << endl << " y: " << x.getNumber();
+    // cout << x.getNumber() << endl;
+    z = x-x;
+    cout << z.getNumber() << endl;
  
 }
