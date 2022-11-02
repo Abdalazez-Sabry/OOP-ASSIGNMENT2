@@ -67,8 +67,14 @@ BigReal::BigReal(double num){
 }
 
 void BigReal::initalizeReal(string num){
-    decimalPoint =num.size()- num.find(".");
+    decimalPoint =num.size()- num.find(".") -1;
 
+    // cout << decimalPoint << endl;
+    if (num[0] == '.')
+    {
+        num.insert('0', 0);
+    }
+    
     
     if (num.find(".") == -1)
     {
@@ -82,17 +88,18 @@ void BigReal::initalizeReal(string num){
         removeSuffixZeros(realNumber);
     }
     removePrefixZeros(realNumber);
-    // if (realNumber.getNumber ="")
 }
 
 // removes any unnecessary zeros at the beginning of the number  ex. 01 -> 1 
 void BigReal::removePrefixZeros(BigDecimalInt& num){
     char newSign = (num.sign() == 1)? '+' : '-';
     string newNum =  num.getNumber(); 
+    // cout << "newNum " << newNum << " decimal " << decimalPoint << endl;
     for (int i = 0; i < newNum.size() - decimalPoint-1; i++){ 
-        if (newNum[i] == '0' ){
+        if (newNum[i] == '0' && newNum.size() >1){
             newNum.erase(i, 1);
             i--;
+            // cout << " test " << newNum << endl;
         }
         else{
             break;
@@ -107,8 +114,8 @@ void BigReal::removeSuffixZeros(BigDecimalInt& num){
     char newSign = (num.sign() == 1)? '+' : '-';
     string newNum = num.getNumber(); 
     int newDecimal = decimalPoint;
-    for (int i = newNum.size() - 1; i > decimalPoint; i --){ 
-        if (newNum[i] == '0'){
+    for (int i = newNum.size() - 1; i > decimalPoint; i -- ){ 
+        if (newNum[i] == '0' && newDecimal >=0){
             newNum.erase(i, 1);
             newDecimal--;
         }
@@ -117,9 +124,9 @@ void BigReal::removeSuffixZeros(BigDecimalInt& num){
         }
     }
     // change this plese
-    if (newNum == ""){
-        newNum = "0";
-    }
+    // if (newNum == ""){
+    //     newNum = "0";
+    // }
     decimalPoint = newDecimal;
     num = (newSign + newNum);
     
@@ -150,7 +157,6 @@ void BigReal::setNumber(string newNum){
 }
 
 BigReal BigReal::operator+(BigReal anotherReal){
-
     return calculation(anotherReal);
 }
 
@@ -166,15 +172,23 @@ BigReal BigReal:: operator-(BigReal anotherReal){
 BigReal BigReal::calculation(BigReal anotherReal){
     BigDecimalInt realNumberCopy = realNumber;
     suffixZeros(realNumberCopy, anotherReal.realNumber);
-    cout << realNumberCopy << " another real: " << anotherReal.realNumber << endl;
+    
 
     BigReal result;
     BigDecimalInt resultDecimal = realNumberCopy + anotherReal.realNumber;
     char resultSign = (resultDecimal.sign() == 1)? '+' : '-';
     int resultDecimalPoint = (decimalPoint > anotherReal.decimalPoint)? decimalPoint : anotherReal.decimalPoint;
     string resultStr = resultDecimal.getNumber();
+    if (resultStr == "0")
+    {
+        result.setNumber("0");
+        return result;
+    }
     resultStr.insert(resultStr.size() - resultDecimalPoint, ".");
+    
+    
     result.setNumber(resultSign + resultStr);
+    // cout << "test " <<endl;
     return result;
 }
 
@@ -266,14 +280,16 @@ int main(){
     BigReal z ("500.5");
     BigReal t("500.6");
     BigReal n("0");
+    // cout << n.getNumber() << endl;
+    // cout << (t+n).getNumber() << endl;
 
-    cout << x.getNumber() << y.getNumber() << endl;
-    cout << (x>y) << " second " << (y<z) << " third "<< (z>t) << " fourth " << (n>x) << " fifth " << (n > z) << endl;
-    cout << x.getNumber() << y.getNumber() << endl;
+    // cout << x.getNumber() << y.getNumber() << endl;
+    // cout << (x>y) << " second " << (y<z) << " third "<< (z>t) << " fourth " << (n>x) << " fifth " << (n > z) << endl;
+    // cout << x.getNumber() << y.getNumber() << endl;
 
     // cout << y.getNumber() << " second " << x.getNumber() << endl;
     
-    // cout << x.getNumber() << endl;
-    // z = x - y;
-    // cout << z.getNumber() << endl << " y: " << x.getNumber();
+    cout << x.getNumber() << endl;
+    z = y-y;
+    cout << z.getNumber() << endl << " y: " << x.getNumber();
 }
