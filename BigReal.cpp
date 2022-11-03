@@ -3,7 +3,7 @@
 // Last Modification Date: 31/10/2022
 // Author1 and ID and Group: Abdalazez Sabry Abdalazez  ID: 20210212 (a, b, c)
 // Author2 and ID and Group: Karim Mohamed Mohsen  ID: 20210509
-// Author3 and ID and Group: Ayman  ID: 20210517 (f, i, j , k)
+// Author3 and ID and Group: Ayman Mohammed Aboukhalifa  ID: 20210517 (f, i, j , k)
 /*
 description: In this problem we developed a new C++ type (class).
 that can hold unlimited real values and performs operations on them.
@@ -14,7 +14,7 @@ such as: +, -, <, > and ==.
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "BigDecimalIntClass.cpp"
+#include "BigReal.h"
 
 using namespace std;
 

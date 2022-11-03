@@ -11,6 +11,7 @@ such as: +, -, <, and >.
  */
 
 #include "BigDecimalIntClass.h"
+#include "BigReal.h"
 
 int main() {
 /*    string n1 = "-34", n2 = "100", n3 = "-500", n4 = "7";
