@@ -14,47 +14,48 @@ such as: +, -, <, > and ==.
 #include <iostream>
 #include <string>
 #include <sstream>
-//#include "BigReal.h"
-#include "BigDecimalIntClass.cpp"
+#include "BigReal.h"
+//#include "BigDecimalIntClass.h"
 
 using namespace std;
 
-class BigReal{
-    private:
-        BigDecimalInt realNumber;
-        int decimalPoint;
-        void initalizeReal(string num);
-        char getBigDecimalSign(BigDecimalInt b);
-        void removeSuffixZeros(BigDecimalInt& num);
-        void removePrefixZeros(BigDecimalInt& num);
-        void removeSignIfZero();
-        void addSuffixZeros(BigReal & first, BigReal & second);
-        string fillZerosToDecimalPoint(string str, int decimalPoint);
+// class BigReal{
+//     private:
+//         BigDecimalInt realNumber;
+//         int decimalPoint;
+//         void initalizeReal(string num);
+//         char getBigDecimalSign(BigDecimalInt b);
+//         void removeSuffixZeros(BigDecimalInt& num);
+//         void removePrefixZeros(BigDecimalInt& num);
+//         void removeSignIfZero();
+//         void addSuffixZeros(BigReal & first, BigReal & second);
+//         string fillZerosToDecimalPoint(string str, int decimalPoint);
         
-    public:
-        BigReal(){}
-        BigReal(BigDecimalInt num);
-        BigReal(string num);
-        BigReal(int num);
-        BigReal(double num);
+//         BigReal sum(BigReal anotherNumber);
+        
+//     public:
+//         BigReal() {}
+//         BigReal(BigDecimalInt num);
+//         BigReal(string num);
+//         BigReal(int num);
+//         BigReal(double num);
 
-        string getNumber();
-        void setNumber(BigDecimalInt newNum);
-        void setNumber(int newNum);
-        void setNumber(double newNum);
-        void setNumber(string newNum);
-        int size();
-        char sign();
-    
-        BigReal sum(BigReal anotherNumber);
-        BigReal operator+(const BigReal anotherReal);
-        BigReal operator-(const BigReal anotherReal);
-        bool operator >(BigReal anotherReal);
-        bool operator <(BigReal anotherReal);
-        bool operator==(BigReal anotherReal);
-        friend ostream& operator << (ostream& out, BigReal num);
-        friend istream& operator >> (istream& in, BigReal& num);
-};
+//         int size();
+//         char sign();
+
+//         string getNumber();
+//         void setNumber(BigDecimalInt newNum);
+//         void setNumber(int newNum);
+//         void setNumber(double newNum);
+//         void setNumber(string newNum);  
+//         BigReal operator+(const BigReal anotherReal);
+//         BigReal operator-(const BigReal anotherReal);
+//         bool operator >(BigReal anotherReal);
+//         bool operator <(BigReal anotherReal);
+//         bool operator==(BigReal anotherReal);
+//         friend ostream& operator << (ostream& out, BigReal num);
+//         friend istream& operator >> (istream& in, BigReal& num);
+// };
 
 BigReal::BigReal(BigDecimalInt num){
     char sign = getBigDecimalSign(num);
