@@ -15,7 +15,6 @@ such as: +, -, <, > and ==.
 #include <string>
 #include <sstream>
 #include "BigReal.h"
-//#include "BigDecimalIntClass.h"
 
 using namespace std;
 
@@ -57,6 +56,11 @@ using namespace std;
 //         friend istream& operator >> (istream& in, BigReal& num);
 // };
 
+BigReal::BigReal()
+{
+    initalizeReal(to_string(0.0));
+}
+
 BigReal::BigReal(BigDecimalInt num){
     char sign = getBigDecimalSign(num);
     initalizeReal(sign + num.getNumber());
@@ -65,12 +69,17 @@ BigReal::BigReal(BigDecimalInt num){
 BigReal::BigReal(string num){
     initalizeReal(num);
 }
-BigReal::BigReal(int num){
+
+BigReal::BigReal(double num)
+{
     initalizeReal(to_string(num));
 }
-BigReal::BigReal(double num){
-    initalizeReal(to_string(num));
-}
+
+
+// BigReal::BigReal(int num){
+//     initalizeReal(to_string(num));
+// }
+
 
 void BigReal::initalizeReal(string num){
     int dotPos = num.find(".");

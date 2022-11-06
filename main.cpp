@@ -10,7 +10,6 @@ that can hold unlimited decimal integer values and performs arithmetic operation
 such as: +, -, <, and >.
  */
 
-#include "BigDecimalIntClass.h"
 #include "BigReal.h"
 
 // int main() {

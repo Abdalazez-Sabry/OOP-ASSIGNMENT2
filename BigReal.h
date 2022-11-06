@@ -18,10 +18,11 @@ class BigReal{
         BigReal sum(BigReal anotherNumber);
         
     public:
-        BigReal() {}
+        //BigReal() {}
+        BigReal();
         BigReal(BigDecimalInt num);
         BigReal(string num);
-        BigReal(int num);
+        //BigReal(int num);
         BigReal(double num);
 
         int size();
