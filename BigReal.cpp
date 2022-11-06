@@ -14,14 +14,13 @@ such as: +, -, <, > and ==.
 #include <iostream>
 #include <string>
 #include <sstream>
-#include "BigReal.h"
+//#include "BigReal.h"
+#include "BigDecimalIntClass.cpp"
 
 using namespace std;
 
 class BigReal{
     private:
-        BigDecimalInt intPart;
-        BigDecimalInt floatPart;
         BigDecimalInt realNumber;
         int decimalPoint;
         void initalizeReal(string num);
@@ -53,6 +52,8 @@ class BigReal{
         bool operator >(BigReal anotherReal);
         bool operator <(BigReal anotherReal);
         bool operator==(BigReal anotherReal);
+        friend ostream& operator << (ostream& out, BigReal num);
+        friend istream& operator >> (istream& in, BigReal& num);
 };
 
 BigReal::BigReal(BigDecimalInt num){
@@ -233,28 +234,43 @@ void BigReal::addSuffixZeros(BigReal & first, BigReal & second){
     string suffix(difference, '0');
     small.realNumber = small.sign() + small.realNumber.getNumber() + suffix;
 }
-int main(){
-    BigReal x("-0750.000");
-    BigReal y("-500.5");
-    BigReal z ("500.5");
-    BigReal t("-500.5");
-    BigReal n("0");
-    // cout << n.getNumber() << endl;
-    // cout << (t+n).getNumber() << endl;
 
-    // cout << x.getNumber() << y.getNumber() << endl;
-    // cout << (x>y) << " second " << (y<z) << " third "<< (z>t) << " fourth " << (n>x) << " fifth " << (n > z) << endl;
-    // cout << x.getNumber() << y.getNumber() << endl;
-    // cout << x.getNumber() << y.getNumber() << endl;
-    // cout << (x>y) << " second " << (y<z) << " third "<< (z>t) << " fourth " << (n>x) << " fifth " << (n > z) << endl;
-    // cout << x.getNumber() << y.getNumber() << endl;
-
-    // cout << y.getNumber() << " second " << x.getNumber() << endl;
-
-    // cout << x.getNumber() << endl;
-    // z = x - y;
-    // cout << z.getNumber() << endl << " y: " << x.getNumber();
-    // cout << x.getNumber() << endl;
-    z = x-x;
-    cout << z.getNumber() << endl;
+ostream& operator << (ostream& out, BigReal num)
+{
+    out << num.getNumber();
+    return out;
 }
+
+istream& operator >> (istream& in, BigReal& num)
+{
+    string s;
+    in >> s;
+    num.setNumber(s);
+    return in;
+}
+//  int main(){
+// //     BigReal x("-0750.000");
+// //     BigReal y("-500.5");
+// //     BigReal z ("500.5");
+// //     BigReal t("-500.5");
+// //     BigReal n("0");
+// cout << "hello" << endl;
+//     // cout << n.getNumber() << endl;
+//     // cout << (t+n).getNumber() << endl;
+
+//     // cout << x.getNumber() << y.getNumber() << endl;
+//     // cout << (x>y) << " second " << (y<z) << " third "<< (z>t) << " fourth " << (n>x) << " fifth " << (n > z) << endl;
+//     // cout << x.getNumber() << y.getNumber() << endl;
+//     // cout << x.getNumber() << y.getNumber() << endl;
+//     // cout << (x>y) << " second " << (y<z) << " third "<< (z>t) << " fourth " << (n>x) << " fifth " << (n > z) << endl;
+//     // cout << x.getNumber() << y.getNumber() << endl;
+
+//     // cout << y.getNumber() << " second " << x.getNumber() << endl;
+
+//     // cout << x.getNumber() << endl;
+//     // z = x - y;
+//     // cout << z.getNumber() << endl << " y: " << x.getNumber();
+//     // cout << x.getNumber() << endl;
+//     //z = x-x;
+//     //cout << z.getNumber() << endl;
+// }
