@@ -1,4 +1,5 @@
 #include<iostream>
+#include<string>
 #include"BankSystem.h"
 
 using namespace std;
@@ -16,6 +17,7 @@ SavingsBankAccount::SavingsBankAccount(double initBalance, double minBalance){
 
 
 double BankAccount::getBalance(){
+    // cout << "hello " << balance << endl;
     return balance;
 }
 void BankAccount::setBalance(double amount){
@@ -38,7 +40,12 @@ void SavingsBankAccount::setMinBalance(double amount){
         cout << "Sorry, the minimum balance can't be a negative number" << endl;
     }
 }
-
+void BankAccount::setClient(Client* client){
+    ptrClient = client;
+}
+Client* BankAccount::getClient(){
+    return ptrClient;
+}
 
 void BankAccount::withdraw(double amount){
     if (amount <= balance)
@@ -75,6 +82,15 @@ void SavingsBankAccount::deposit(double amount = 0){
     }
 }
 
+Client::Client(string name, string address, string phoneNumber, BankAccount* ptrBankAccount){
+    this->name = name;
+    this->address = address;
+    this->phoneNumber = phoneNumber;
+    this->ptrBankAccount = ptrBankAccount;
+    ptrBankAccount->setClient(this);
+    cout << "test " << ptrBankAccount->getBalance() << endl;
+}
+
 string Client::getName(){
     return name;
 }
@@ -88,10 +104,73 @@ BankAccount* Client::getBankAccount(){
     return ptrBankAccount;
 }
 
+
+void BankingApplication::printMenu(){
+    cout << "Welcome to FCAI Banking Application \n"<<
+    "1. Create a New Account \n2. List Clients and Accounts \n3. Withdraw Money \n4. Deposit Money \n5. Exit \n" << 
+    "Please Enter Choice =========> " ; 
+}
+void BankingApplication::createAccount(){
+    string name, address, phonenumber;
+    int accountType;
+    double balance;
+    cout << "Please Enter Client Name =========> ";
+    getline(cin>>ws, name);
+    cout << "Please Enter Client Address =======> ";
+    getline(cin>>ws, address);
+    cout << "Please Enter Client Phone =======> ";
+    getline(cin>>ws, phonenumber);
+    cout << "What Type of Account Do You Like? (1) Basic (2) Saving - Type 1 or 2 =========> ";
+    cin >> accountType;
+    cout << "Please Enter the Starting Balance =========> ";
+    cin >> balance;
+    if (accountType == 1)
+    {
+
+        BankAccount account(balance);
+        account.setID("FCAI-" + to_string(clientsList.size() +1));
+        accountsList.push_back(account);
+        Client newClient(name, address, phonenumber, &accountsList[accountsList.size()-1]);
+        clientsList.push_back(newClient);
+    }else if (accountType == 2)
+    {
+        double minimum;
+        cout << "Please Enter the Minimum Balance =========> ";
+        cin >> minimum;
+        SavingsBankAccount account(balance, minimum);
+        account.setID("FCAI-" + to_string(clientsList.size() +1));
+        accountsList.push_back(account);
+        Client newClient(name, address, phonenumber, &accountsList[accountsList.size()-1]);
+        clientsList.push_back(newClient);
+        
+    }
+    cout << "An account was created with ID " << clientsList[(clientsList.size()-1)].getBankAccount()->getID() <<
+    " and Starting Balance " << accountsList[(accountsList.size() -1)].getBalance() << " L.E." << endl;
+}
+void BankingApplication::listClients(){
+    for(int i = 0; i < clientsList.size(); i++){
+        cout << "-------------- " << clientsList[i].getName() << " --------------" << endl;
+        cout << "Address: " << clientsList[i].getAdress() << endl;
+        cout << "Phone: " << clientsList[i].getPhoneNumber() << endl;
+        cout << "Balance: " << clientsList[i].getBankAccount()->getBalance() << endl;
+        cout << clientsList[i].getBankAccount()->getID() << endl;
+    }
+}
+
+
+
 int main(){
     SavingsBankAccount y;
-    string lol =  "1140820411";
-    y.setBalance(10000);
-    Client nour("name", "october", lol, &y);
-    cout << nour.ptrBankAccount->getBalance();
-    }
+    BankingApplication t;
+    
+    // string lol =  "1140820411";
+    // y.setBalance(10000);
+    // Client nour("name", "october", lol, &y);
+    // cout << nour.getAdress() << endl;
+    t.createAccount();
+    t.createAccount();
+    // test.createAccount();
+    t.listClients();
+    cout << '\n' << t.clientsList[0].getBankAccount()->getID() << endl;
+    
+}

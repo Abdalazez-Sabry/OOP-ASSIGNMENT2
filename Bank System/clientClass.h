@@ -6,19 +6,16 @@
 
 using namespace std;
 
+class BankAccount;
+
 class Client{
-    public:
+    private:
         string name;
         string address;
         string phoneNumber;
         BankAccount* ptrBankAccount; 
     public:
-        Client(string name, string adreess, string phoneNumber, BankAccount* ptrBankAccount){
-            this->name = name;
-            this->address = address;
-            this->phoneNumber = phoneNumber;
-            this->ptrBankAccount = ptrBankAccount;
-        }
+        Client(string name, string address, string phoneNumber, BankAccount* ptrBankAccount);
         string getName();
         string getAdress();
         string getPhoneNumber();

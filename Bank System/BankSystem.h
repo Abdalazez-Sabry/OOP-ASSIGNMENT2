@@ -2,12 +2,22 @@
 #define BANKSYSTEM_H
 
 #include<iostream>
+#include<vector>
 #include"clientClass.h"
 
 using namespace std;
 
-class BankingApplication{
+class Client;
 
+class BankingApplication{
+    public:
+        vector<Client> clientsList;
+        vector<BankAccount> accountsList;
+
+    public:
+        void printMenu();
+        void createAccount();
+        void listClients();
 };
 
 class BankAccount{
@@ -24,7 +34,8 @@ class BankAccount{
         void setID(string newID);
         void withdraw(double amount);
         void deposit(double amount );
-        Client* setClient();
+        void setClient(Client* client);
+        Client* getClient();
 };
 
 class SavingsBankAccount : public BankAccount{
