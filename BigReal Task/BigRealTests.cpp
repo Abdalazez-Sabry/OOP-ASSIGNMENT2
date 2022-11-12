@@ -108,10 +108,10 @@ int main(){
     cout << b.size() << "__" << d.sign() << "__" << d << endl;
     cin >> a >> b >> d >> e;
     cout << a << "__" << b << "__" << d << e << endl;
-    // test1();
-    // test2();
-    // test3();
-    // test4();
+    test1();
+    test2();
+    test3();
+    test4();
 
     // BigReal x("-0750.000");
     // BigReal y("-500.5");
@@ -136,5 +136,6 @@ int main(){
     // // cout << x.getNumber() << endl;
     // z = x-x;
     // cout << z.getNumber() << endl;
+    
  
 }

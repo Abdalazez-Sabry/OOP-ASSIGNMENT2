@@ -1,6 +1,10 @@
 #ifndef BIGREAL_H
 #define BIGREAL_H
 
+#include <iostream>
+#include <string>
+#include <sstream>
+
 #include "BigDecimalIntClass.h"
 
 class BigReal{
@@ -18,11 +22,9 @@ class BigReal{
         BigReal sum(BigReal anotherNumber);
         
     public:
-        //BigReal() {}
         BigReal();
         BigReal(BigDecimalInt num);
         BigReal(string num);
-        //BigReal(int num);
         BigReal(double num);
 
         int size();
@@ -41,7 +43,5 @@ class BigReal{
         friend ostream& operator << (ostream& out, BigReal num);
         friend istream& operator >> (istream& in, BigReal& num);
 };
-
-
 
 #endif

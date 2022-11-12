@@ -10,51 +10,9 @@ that can hold unlimited real values and performs operations on them.
 such as: +, -, <, > and ==.
  */
 
-
-#include <iostream>
-#include <string>
-#include <sstream>
 #include "BigReal.h"
 
 using namespace std;
-
-// class BigReal{
-//     private:
-//         BigDecimalInt realNumber;
-//         int decimalPoint;
-//         void initalizeReal(string num);
-//         char getBigDecimalSign(BigDecimalInt b);
-//         void removeSuffixZeros(BigDecimalInt& num);
-//         void removePrefixZeros(BigDecimalInt& num);
-//         void removeSignIfZero();
-//         void addSuffixZeros(BigReal & first, BigReal & second);
-//         string fillZerosToDecimalPoint(string str, int decimalPoint);
-        
-//         BigReal sum(BigReal anotherNumber);
-        
-//     public:
-//         BigReal() {}
-//         BigReal(BigDecimalInt num);
-//         BigReal(string num);
-//         BigReal(int num);
-//         BigReal(double num);
-
-//         int size();
-//         char sign();
-
-//         string getNumber();
-//         void setNumber(BigDecimalInt newNum);
-//         void setNumber(int newNum);
-//         void setNumber(double newNum);
-//         void setNumber(string newNum);  
-//         BigReal operator+(const BigReal anotherReal);
-//         BigReal operator-(const BigReal anotherReal);
-//         bool operator >(BigReal anotherReal);
-//         bool operator <(BigReal anotherReal);
-//         bool operator==(BigReal anotherReal);
-//         friend ostream& operator << (ostream& out, BigReal num);
-//         friend istream& operator >> (istream& in, BigReal& num);
-// };
 
 BigReal::BigReal()
 {
@@ -74,12 +32,6 @@ BigReal::BigReal(double num)
 {
     initalizeReal(to_string(num));
 }
-
-
-// BigReal::BigReal(int num){
-//     initalizeReal(to_string(num));
-// }
-
 
 void BigReal::initalizeReal(string num){
     int dotPos = num.find(".");
@@ -110,12 +62,10 @@ void BigReal::initalizeReal(string num){
 void BigReal::removePrefixZeros(BigDecimalInt& num){
     char newSign = getBigDecimalSign(realNumber);
     string newNum =  num.getNumber(); 
-    // cout << "newNum " << newNum << " decimal " << decimalPoint << endl;
     for (int i = 0; i < newNum.size() - decimalPoint-1; i++){ 
         if (newNum[i] == '0' && newNum.size() >1){
             newNum.erase(i, 1);
             i--;
-            // cout << " test " << newNum << endl;
         }
         else{
             break;
@@ -172,9 +122,7 @@ void BigReal::setNumber(BigDecimalInt newNum){
     char sign = getBigDecimalSign(newNum);
     initalizeReal(sign + newNum.getNumber());
 }
-void BigReal::setNumber(int newNum){
-    initalizeReal(to_string(newNum));
-}
+
 void BigReal::setNumber(double newNum){
     initalizeReal(to_string(newNum));
 }
@@ -210,7 +158,6 @@ BigReal BigReal::sum(BigReal anotherReal){
     resultStr.insert(resultStr.size() - resultDecimalPoint, ".");
 
     result.setNumber(resultSign + resultStr);
-    // cout << "test " <<endl;
     return result;
 }
 string BigReal::fillZerosToDecimalPoint(string str, int decimalPoint){
@@ -258,29 +205,3 @@ istream& operator >> (istream& in, BigReal& num)
     num.setNumber(s);
     return in;
 }
-//  int main(){
-// //     BigReal x("-0750.000");
-// //     BigReal y("-500.5");
-// //     BigReal z ("500.5");
-// //     BigReal t("-500.5");
-// //     BigReal n("0");
-// cout << "hello" << endl;
-//     // cout << n.getNumber() << endl;
-//     // cout << (t+n).getNumber() << endl;
-
-//     // cout << x.getNumber() << y.getNumber() << endl;
-//     // cout << (x>y) << " second " << (y<z) << " third "<< (z>t) << " fourth " << (n>x) << " fifth " << (n > z) << endl;
-//     // cout << x.getNumber() << y.getNumber() << endl;
-//     // cout << x.getNumber() << y.getNumber() << endl;
-//     // cout << (x>y) << " second " << (y<z) << " third "<< (z>t) << " fourth " << (n>x) << " fifth " << (n > z) << endl;
-//     // cout << x.getNumber() << y.getNumber() << endl;
-
-//     // cout << y.getNumber() << " second " << x.getNumber() << endl;
-
-//     // cout << x.getNumber() << endl;
-//     // z = x - y;
-//     // cout << z.getNumber() << endl << " y: " << x.getNumber();
-//     // cout << x.getNumber() << endl;
-//     //z = x-x;
-//     //cout << z.getNumber() << endl;
-// }
