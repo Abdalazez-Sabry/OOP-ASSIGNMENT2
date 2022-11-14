@@ -7,6 +7,7 @@
 using namespace std;
 
 class BankAccount;
+class SavingsBankAccount;
 
 class Client{
     private:

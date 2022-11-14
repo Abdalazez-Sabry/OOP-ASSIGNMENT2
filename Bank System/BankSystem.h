@@ -13,6 +13,7 @@ class BankingApplication{
     private:
         vector<Client> clientsList;
         vector<BankAccount> accountsList;
+        vector<SavingsBankAccount> savingsBankAccounts;
         vector<string> getNewAccountInputs();
         void printMenu();
         void withdraw();
@@ -39,21 +40,21 @@ class BankAccount{
         void setBalance(double amount);
         string getID();
         void setID(string newID);
-        void withdraw(double amount);
-        void deposit(double amount );
+        virtual void withdraw(double amount);
+        virtual void deposit(double amount);
         void setClient(Client* client);
         Client* getClient();
 };
 
 class SavingsBankAccount : public BankAccount{
     private:
-        double minimumBalance;
+        double minimumBalance; 
     public:
         SavingsBankAccount(double , double);
         double getMinBalance();
         void setMinBalance(double amount);
-        void virtual withdraw(double amount);
-        void virtual deposit(double amount);
+        void  withdraw(double amount);
+        void  deposit(double amount);
 };
 
 

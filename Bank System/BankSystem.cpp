@@ -1,5 +1,6 @@
 #include<iostream>
 #include<string>
+#include<iomanip>
 #include"BankSystem.h"
 
 using namespace std;
@@ -103,8 +104,9 @@ BankAccount* Client::getBankAccount(){
 }
 
 BankingApplication::BankingApplication(){
-    clientsList.reserve(200);
-    accountsList.reserve(200);
+    clientsList.reserve(20);
+    accountsList.reserve(20);
+    savingsBankAccounts.reserve(20);
 }
 
 void BankingApplication::printMenu(){
@@ -116,7 +118,7 @@ void BankingApplication::printMenu(){
 void BankingApplication::createAccount(){
     enum accountsIfnoIndex{name, address, phoneNumber, accountType, balance, minimum};
     vector<string> accountsInfo = getNewAccountInputs();
-    if (accountsInfo[balance].find_first_not_of("0123456789") ||accountsInfo[phoneNumber].find_first_not_of("0123456789") || accountsInfo[minimum].find_first_not_of("0123456789")){
+    if (accountsInfo[balance].find_first_not_of("0123456789") != string::npos ||accountsInfo[phoneNumber].find_first_not_of("0123456789") != string::npos || accountsInfo[minimum].find_first_not_of("0123456789")!= string::npos){
         cout << "wrong account type" << endl;
         return;
     }
@@ -124,22 +126,29 @@ void BankingApplication::createAccount(){
         BankAccount account(stod(accountsInfo[balance]));
         account.setID("FCAI-" + to_string(clientsList.size() +1));
         accountsList.push_back(account);
+
         Client newClient(accountsInfo[name], accountsInfo[address], accountsInfo[phoneNumber], &accountsList[accountsList.size()-1]);
         clientsList.push_back(newClient);
+        
+        cout << "An account was created with ID " << clientsList[(clientsList.size()-1)].getBankAccount()->getID() <<
+        " and Starting Balance " << accountsList[(accountsList.size() -1)].getBalance() << "L.E." << endl;
 
     }else if (accountsInfo[accountType] == "2"){
         SavingsBankAccount account(stod(accountsInfo[balance]), stod(accountsInfo[minimum]));
         account.setID("FCAI-" + to_string(clientsList.size() +1));
-        accountsList.push_back(account);
-        Client newClient(accountsInfo[name], accountsInfo[address], accountsInfo[phoneNumber], &accountsList[accountsList.size()-1]);
+        savingsBankAccounts.push_back(account);
+
+        Client newClient(accountsInfo[name], accountsInfo[address], accountsInfo[phoneNumber], &savingsBankAccounts[savingsBankAccounts.size()-1]);
         clientsList.push_back(newClient);
-    }else{
+
+        cout << "An account was created with ID " << clientsList[(clientsList.size()-1)].getBankAccount()->getID() <<
+        " and Starting Balance " << savingsBankAccounts[(savingsBankAccounts.size() -1)].getBalance() << "L.E." << endl;
+    }
+    else{
         cout << "wrong account type" << endl;
         return;
     }
-    
-    cout << "An account was created with ID " << clientsList[(clientsList.size()-1)].getBankAccount()->getID() <<
-    " and Starting Balance " << accountsList[(accountsList.size() -1)].getBalance() << "L.E." << endl;
+
 }
 
 vector<string> BankingApplication::getNewAccountInputs(){
@@ -166,7 +175,7 @@ void BankingApplication::listClients(){
         cout << "-------------- " << clientsList[i].getName() << " --------------" << endl;
         cout << "Address: " << clientsList[i].getAdress() << endl;
         cout << "Phone: " << clientsList[i].getPhoneNumber() << endl;
-        cout << "Balance: " << clientsList[i].getBankAccount()->getBalance() << endl;
+        cout << "Balance: " << clientsList[i].getBankAccount()->getBalance() << fixed << endl;
         cout << clientsList[i].getBankAccount()->getID() << endl;
         cout << "------------------------------------------" << endl;
     }
@@ -250,17 +259,5 @@ void BankingApplication::mainMenuLoop(){
 
 int main(){
     BankingApplication t;
-
     t.mainMenuLoop();
-    
-    // string lol =  "1140820411";
-    // y.setBalance(10000);
-    // Client nour("name", "october", lol, &y);
-    // cout << nour.getAdress() << endl;
-    // t.createAccount();
-    // t.createAccount();
-    // test.createAccount();
-    // t.listClients();
-    // cout << '\n' << t.clientsList[1].getBankAccount()->getID() << endl;
-    
 }
