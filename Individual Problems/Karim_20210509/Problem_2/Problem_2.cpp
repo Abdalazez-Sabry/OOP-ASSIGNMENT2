@@ -73,18 +73,18 @@ int main(){
     for (int i = 0; i < 3; i++) {
         cout << figureNumbers.nextLabel() << ", ";
     }
-    cout << endl << "Point numbers: ";
+    cout << "\n\n" << "Point numbers: ";
     for (int i = 0; i < 5; i++) {
         cout << pointNumbers.nextLabel() << ", ";
     }
-    cout << endl << "More figures: ";
+    cout << "\n\n" << "More figures: ";
     for (int i = 0; i < 3; i++) {
         cout << figureNumbers.nextLabel() << ", ";
     }
-    cout << endl;
+    cout << "\n\n";
     
     FileLabelGenerator figureLabels ("Figure ", 1, "labels.txt");
-    cout << "Figure labels: \n";
+    cout << "File Figure labels: \n";
     for (int i = 0; i < 3; i++) {
     cout << figureLabels.nextLabel() << endl;
     }
