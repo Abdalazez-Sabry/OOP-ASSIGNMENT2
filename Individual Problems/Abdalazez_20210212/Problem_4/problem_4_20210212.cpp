@@ -44,6 +44,8 @@ class Process{
                     return to_string(sessionNum);break;
                 case 4:
                     return to_string(memUsage);break;
+                default:
+                return name;
             }
         }
 };
@@ -55,7 +57,6 @@ class TaskManager{
         void excuteTasklistCommand(){
             vector<string> cmdOutput = excuteCmdCommand("tasklist");
             removeUnwantedLines(cmdOutput);
-
             for (string line : cmdOutput){
                 saveProcessesInfo(line);
             }
@@ -161,7 +162,7 @@ vector<string> excuteCmdCommand(string command){
     return result;
 }
 
-string removePrefixSpaces(string &s){
+void removePrefixSpaces(string &s){
     for (int i = 0; i < s.size(); i++){
         if (s[i] == ' '){
             s.erase(i, 1);

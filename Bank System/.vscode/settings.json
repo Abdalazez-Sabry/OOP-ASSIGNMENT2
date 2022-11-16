@@ -9,6 +9,7 @@
         "vector": "cpp",
         "xutility": "cpp",
         "ostream": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "ios": "cpp"
     }
 }
