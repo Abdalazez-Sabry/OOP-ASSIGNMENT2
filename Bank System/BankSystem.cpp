@@ -118,6 +118,8 @@ void BankingApplication::printMenu(){
 void BankingApplication::createAccount(){
     enum accountsIfnoIndex{name, address, phoneNumber, accountType, balance, minimum};
     vector<string> accountsInfo = getNewAccountInputs();
+    
+    
     if (accountsInfo[balance].find_first_not_of("0123456789") != string::npos ||accountsInfo[phoneNumber].find_first_not_of("0123456789") != string::npos || accountsInfo[minimum].find_first_not_of("0123456789")!= string::npos){
         cout << "wrong account type" << endl;
         return;
@@ -131,9 +133,14 @@ void BankingApplication::createAccount(){
         clientsList.push_back(newClient);
         
         cout << "An account was created with ID " << clientsList[(clientsList.size()-1)].getBankAccount()->getID() <<
-        " and Starting Balance " << accountsList[(accountsList.size() -1)].getBalance() << "L.E." << endl;
+        " and Starting Balance " << fixed << setprecision(0) << accountsList[(accountsList.size() -1)].getBalance() << "L.E." << endl;
 
     }else if (accountsInfo[accountType] == "2"){
+        cout << "test : " << (accountsInfo[balance] < accountsInfo[minimum]) << endl;
+        if (stod(accountsInfo[balance]) < stod(accountsInfo[minimum])){
+        cout << "the balance cannot be less than the minimum balance " << endl;
+        return;
+        }
         SavingsBankAccount account(stod(accountsInfo[balance]), stod(accountsInfo[minimum]));
         account.setID("FCAI-" + to_string(clientsList.size() +1));
         savingsBankAccounts.push_back(account);
@@ -142,7 +149,7 @@ void BankingApplication::createAccount(){
         clientsList.push_back(newClient);
 
         cout << "An account was created with ID " << clientsList[(clientsList.size()-1)].getBankAccount()->getID() <<
-        " and Starting Balance " << savingsBankAccounts[(savingsBankAccounts.size() -1)].getBalance() << "L.E." << endl;
+        " and Starting Balance " << fixed << setprecision(0) << savingsBankAccounts[(savingsBankAccounts.size() -1)].getBalance() << "L.E." << endl;
     }
     else{
         cout << "wrong account type" << endl;
@@ -175,8 +182,8 @@ void BankingApplication::listClients(){
         cout << "-------------- " << clientsList[i].getName() << " --------------" << endl;
         cout << "Address: " << clientsList[i].getAdress() << endl;
         cout << "Phone: " << clientsList[i].getPhoneNumber() << endl;
-        cout << "Balance: " << clientsList[i].getBankAccount()->getBalance() << fixed << endl;
-        cout << clientsList[i].getBankAccount()->getID() << endl;
+        cout << "Balance: " << fixed << setprecision(0) << clientsList[i].getBankAccount()->getBalance() << endl;
+        cout << "ID: " << clientsList[i].getBankAccount()->getID() << endl;
         cout << "------------------------------------------" << endl;
     }
 }
