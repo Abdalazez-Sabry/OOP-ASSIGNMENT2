@@ -136,7 +136,6 @@ void BankingApplication::createAccount(){
         " and Starting Balance " << fixed << setprecision(0) << accountsList[(accountsList.size() -1)].getBalance() << "L.E." << endl;
 
     }else if (accountsInfo[accountType] == "2"){
-        cout << "test : " << (accountsInfo[balance] < accountsInfo[minimum]) << endl;
         if (stod(accountsInfo[balance]) < stod(accountsInfo[minimum])){
         cout << "the balance cannot be less than the minimum balance " << endl;
         return;

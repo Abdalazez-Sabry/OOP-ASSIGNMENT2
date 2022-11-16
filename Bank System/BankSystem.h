@@ -53,8 +53,8 @@ class SavingsBankAccount : public BankAccount{
         SavingsBankAccount(double , double);
         double getMinBalance();
         void setMinBalance(double amount);
-        void  withdraw(double amount);
-        void  deposit(double amount);
+        void withdraw(double amount);
+        void deposit(double amount);
 };
 
 
